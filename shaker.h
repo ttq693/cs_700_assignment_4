@@ -8,10 +8,11 @@
 #define ASSIGNMENT_4_SHAKER_H
 #pragma once
 #include <vector>
+using namespace std;
 
 class ShakerSort {
 public:
-    void sortAscending(std::vector<int> &arr);
-    void sortDescending(std::vector<int> &arr);
+    void sortAscending(vector<int> &arr);
+    void sortDescending(vector<int> &arr);
 };
 #endif //ASSIGNMENT_4_SHAKER_H

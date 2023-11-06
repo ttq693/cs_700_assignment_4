@@ -1,63 +1,90 @@
 /// \brief Author         : Tanzila Nasrin Tazin
 /// \brief Creation Date  : 2023-11-04
+/// \brief filename       : main.cpp
 
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <chrono>
 #include "Shaker.h"
+using namespace std;
 
 int main() {
     int size;
-    std::cout << "Enter the size of the vector: ";
-    std::cin >> size;
+    cout << "Enter the size of the vector: ";
+    cin >> size;
 
     // Generate random numbers and store in a vector
-    std::vector<int> numbers;
+    vector<int> numbers;
     srand(static_cast<unsigned int>(time(nullptr)));
     for (int i = 0; i < size; ++i) {
-        numbers.push_back(rand() % 100);  // Generating random numbers between 0 and 99
+        // Generating random numbers between 0 and 999
+        numbers.push_back(rand() % 1000);
     }
 
-    // Save the generated vector in a file
-    std::ofstream outputFile("input.txt");
+    // for Saving the vector in a file
+    ofstream outputFile("input.txt");
     if (outputFile.is_open()) {
         for (int num : numbers) {
             outputFile << num << " ";
         }
+        //vector saved in input.txt file
         outputFile.close();
-        std::cout << "Vector saved in 'input.txt' file.\n";
+        cout << "Vector saved in 'input.txt' file.\n";
     } else {
-        std::cerr << "Unable to open the file.";
+        cerr << "File error";
         return 1;
     }
 
-    // Display the generated vector
-    std::cout << "Generated vector: ";
-    for (int num : numbers) {
-        std::cout << num << " ";
-    }
-    std::cout << std::endl;
-
-    // Sort the vector in ascending order
+    // Sort the saved vector in ascending order and save the execution time
     ShakerSort shakerSort;
-    shakerSort.sortAscending(numbers);
+    vector<int> ascending_Num(numbers); // Copy of original vector for sorting in ascending order
+    auto startAscending = std::chrono::steady_clock::now();
+    shakerSort.sortAscending(ascending_Num);
+    auto endAscending = std::chrono::steady_clock::now();
 
-    std::cout << "Sorted vector in ascending order: ";
-    for (int num : numbers) {
-        std::cout << num << " ";
+    cout << "Time taken for sorting in ascending order: "
+              << std::chrono::duration_cast<std::chrono::microseconds>(endAscending - startAscending).count()
+              << " microseconds." << std::endl;
+
+    // Save sorted ascending order to a file
+    ofstream asc_File("C://Users//tazin//CLionProjects//Assignment_4//Ascending_sort.txt");
+    if (asc_File.is_open()) {
+        for (int num : ascending_Num) {
+            asc_File << num << " ";
+        }
+        asc_File.close();
+        cout << "Sorted vector in ascending order saved in 'Ascending_sort.txt' file.\n";
+    } else {
+        std::cerr << "File error";
+        return 1;
     }
-    std::cout << std::endl;
 
-    // Sort the vector in descending order
-    shakerSort.sortDescending(numbers);
+    // Sort the vector in descending order and report execution time
+    vector<int> descending_Num(numbers); // Copy of original vector for sorting in descending order
 
-    std::cout << "Sorted vector in descending order: ";
-    for (int num : numbers) {
-        std::cout << num << " ";
+    auto startDescending = std::chrono::steady_clock::now();
+    shakerSort.sortDescending(descending_Num);
+    auto endDescending = std::chrono::steady_clock::now();
+
+    cout << "Time taken for sorting in descending order: "
+              << std::chrono::duration_cast<std::chrono::microseconds>(endDescending - startDescending).count()
+              << " microseconds." << std::endl;
+
+    // Save sorted descending order to a file
+    ofstream desc_File("C://Users//tazin//CLionProjects//Assignment_4//Descending_sort.txt");
+    if (desc_File.is_open()) {
+        for (int num : descending_Num) {
+            desc_File << num << " ";
+        }
+        desc_File.close();
+        cout << "Sorted vector in descending order saved in 'Descending_sort.txt' file.\n";
+    } else {
+        cerr << "File error";
+        return 1;
     }
-    std::cout << std::endl;
 
     return 0;
 }
